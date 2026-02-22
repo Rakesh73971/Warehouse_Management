@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from models import Warehouse,StorageType,Zone,Rack,Bin
+from .models import Warehouse,StorageType,Zone,Rack,Bin
 
 class WarehouseSerializer(serializers.ModelSerializer):
     manager_email = serializers.CharField(source='manager.email',read_only=True)
@@ -27,7 +27,21 @@ class BinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bin
         fields = ['id','rack','rack_code','bin_code','current_capacity','is_available']
+        read_only_fields = ['is_available']
 
+    def update(self, instance, validated_data):
+        current_capacity = validated_data.get(
+            'current_capacity',
+            instance.current_capacity
+        )
+        instance.current_capacity = current_capacity
+
+        if instance.current_capacity >= instance.max_capacity:
+            instance.is_available = False
+        else:
+            instance.is_available = True
+        instance.save()
+        return instance
 class StorageTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = StorageType

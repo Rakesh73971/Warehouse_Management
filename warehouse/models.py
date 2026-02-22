@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.db.models import Q,F
 
 # Create your models here.
 class Warehouse(models.Model):
@@ -56,8 +57,20 @@ class Bin(models.Model):
         related_name='bins'
     )
     bin_code = models.CharField(max_length=255)
+    max_capacity = models.IntegerField()
     current_capacity = models.IntegerField(default=0)
     is_available = models.BooleanField(default=True)
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                condition=Q(current_capacity__gte=0) & Q(current_capacity__lte=F('max_capacity')),
+                name='valid_bin_capacity'
+            )
+        ]
+    def save(self, *args, **kwargs):
+        self.is_available = self.current_capacity < self.max_capacity
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Bin {self.bin_code}"
