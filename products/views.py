@@ -11,14 +11,20 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['name']
+    filterset_fields = {
+    'name': ['exact', 'icontains']
+    }
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.select_related('category','storage_type').all()
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['name','category','storage_type']
+    filterset_fields = {
+        'name': ['exact', 'icontains'],
+        'category': ['exact'],
+        'storage_type': ['exact'],
+    }
 
 class InventoryViewSet(viewsets.ModelViewSet):
     queryset = Inventory.objects.select_related('product','bin').all()
@@ -32,5 +38,10 @@ class StockMovementViewSet(viewsets.ModelViewSet):
     serializer_class = StockMovementSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['product','bin','movement_type']
+    filterset_fields = {
+        'product': ['exact'],
+        'bin': ['exact'],
+        'movement_type': ['exact'],
+        'created_at': ['date', 'date__gte', 'date__lte']
+    }
 
