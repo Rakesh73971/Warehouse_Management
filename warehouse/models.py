@@ -64,7 +64,7 @@ class Bin(models.Model):
     class Meta:
         constraints = [
             models.CheckConstraint(
-                check=Q(current_capacity__gte=0) & Q(current_capacity__lte=F('max_capacity')),
+                condition=Q(current_capacity__gte=0) & Q(current_capacity__lte=F('max_capacity')),
                 name='valid_bin_capacity'
             )
         ]
