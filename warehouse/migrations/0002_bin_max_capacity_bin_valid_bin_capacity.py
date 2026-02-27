@@ -18,6 +18,9 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='bin',
-            constraint=models.CheckConstraint(condition=models.Q(('current_capacity__gte', 0), ('current_capacity__lte', models.F('max_capacity'))), name='valid_bin_capacity'),
+            constraint=models.CheckConstraint(
+                check=models.Q(('current_capacity__gte', 0), ('current_capacity__lte', models.F('max_capacity'))),
+                name='valid_bin_capacity'
+            ),
         ),
     ]

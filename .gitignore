@@ -15,3 +15,6 @@ ENV/
 # Django-specific
 media/
 staticfiles/
+
+gunicorn.ctl
+*.ctl

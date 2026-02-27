@@ -52,7 +52,7 @@ class Rack(models.Model):
     
 class Bin(models.Model):
     rack = models.ForeignKey(
-        Rack,
+        'Rack',
         on_delete=models.CASCADE,
         related_name='bins'
     )
@@ -64,7 +64,7 @@ class Bin(models.Model):
     class Meta:
         constraints = [
             models.CheckConstraint(
-                condition=Q(current_capacity__gte=0) & Q(current_capacity__lte=F('max_capacity')),
+                check=Q(current_capacity__gte=0) & Q(current_capacity__lte=F('max_capacity')),
                 name='valid_bin_capacity'
             )
         ]
