@@ -16,7 +16,7 @@ class Product(models.Model):
     storage_type = models.ForeignKey(
         StorageType,
         on_delete=models.CASCADE,
-        related_name='products'
+        related_name='categories'
     )
     category = models.ForeignKey(
         Category,
@@ -44,7 +44,7 @@ class StockMovement(models.Model):
         ('INBOUND','Inbound'),
         ('OUTBOUND','Outbound')
     )
-    produdct = models.ForeignKey(Product,on_delete=models.CASCADE)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE)
     bin = models.ForeignKey(Bin,on_delete=models.CASCADE)
     quantity = models.IntegerField()
     movement_type = models.CharField(max_length=10,choices=MOVEMENT_TYPE)
