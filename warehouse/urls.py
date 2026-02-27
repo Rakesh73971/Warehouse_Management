@@ -7,6 +7,6 @@ router.register('warehouses',WarehouseViewSet,basename='warehouse')
 router.register('zones',ZoneViewSet,basename='zone')
 router.register('racks',RackViewSet,basename='rack')
 router.register('bins',BinViewSet,basename='bin')
-router.register('storage-types',StorageTypeViewSet,basename='storage-type')
+router.register('storagetypes',StorageTypeViewSet,basename='storagetype')
 
 urlpatterns = router.urls
