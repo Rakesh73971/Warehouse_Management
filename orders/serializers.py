@@ -7,8 +7,15 @@ class SalesOrderSerializer(serializers.ModelSerializer):
         fields = ['order_number','customer_name','status','created_at']
 
 class SalesOrderItemSerializer(serializers.ModelSerializer):
-    order_number = serializers.CharField(source='salesorder.order_number',read_only=True)
-    product_name = serializers.CharField(source='product.name',read_only=True)
+    order_number = serializers.CharField(source='order.order_number', read_only=True)
+    product_name = serializers.CharField(source='product.name', read_only=True)
+
     class Meta:
         model = SalesOrderItem
-        fields = ['order','order_number','product','product_name']
+        fields = [
+            'order',
+            'order_number',
+            'product',
+            'product_name',
+            'quantity'
+        ]
