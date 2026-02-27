@@ -1,3 +1,17 @@
-_pycache__
-env
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local configuration / Secrets
 .env
+db.sqlite3
+
+# Environments
+env/
+venv/
+ENV/
+
+# Django-specific
+media/
+staticfiles/
