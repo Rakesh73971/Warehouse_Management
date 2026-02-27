@@ -86,7 +86,73 @@ class TestWarehouseSystemAPI:
         assert response.status_code == 201
         assert len(response.data) == 6
 
-    # -----------
+    # -----------------
     # RACK TESTS
-    # -----------
+    # ------------------
+    def test_create_rack(self):
+        warehouse = Warehouse.objects.create(
+            name='Main Warehouse',
+            location='Hyderabad',
+            manager=self.user
+        )
+        zone = Zone.objects.create(
+            name='Zone A',
+            warehouse=warehouse
+        )
+        response = self.client.post(
+            '/api/warehouse/racks/',
+            {
+                'zone':zone.id,
+                'rack_code':'R001',
+                'max_capacity':100
+            },
+            format='json'
+        )
 
+        assert response.status_code == 201
+        assert Rack.objects.count() == 1
+
+
+    # -------------
+    # BIN TESTS
+    # -------------
+    def test_create_bin(self):
+        warehouse = Warehouse.objects.create(
+            name='Main Warehouse',
+            location='Hyderabad',
+            manager=self.user
+        )
+        zone = Zone.objects.create(
+            name='Zone A',
+            warehouse=warehouse
+        )
+        rack = Rack.objects.create(
+            zone = zone,
+            rack_code = 'R001',
+            max_capacity = 100
+        )
+
+        response = self.client.post(
+            '/api/warehouse/bins/',
+            {
+                'bin_code':'B001',
+                'max_capacity':100,
+                'current_capacity':50,
+                'rack':rack.id
+            },
+            format='json'
+        )
+
+        assert response.status_code == 201
+        assert Bin.objects.count() == 1
+        assert Bin.objects.first().is_available is True
+
+
+    # ---------------
+    # AUTH TEST
+    # ---------------
+    def test_unauthenticated_access(self):
+        self.client.force_authenticate(user=None)
+        
+        response = self.client.post('/api/warehouse/warehouses/')
+        assert response.status_code == 401

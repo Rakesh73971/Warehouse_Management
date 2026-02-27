@@ -26,7 +26,7 @@ class BinSerializer(serializers.ModelSerializer):
     rack_code = serializers.CharField(source='rack.rack_code',read_only=True)
     class Meta:
         model = Bin
-        fields = ['id','rack','rack_code','bin_code','current_capacity','is_available']
+        fields = ['id','rack','rack_code','bin_code','max_capacity','current_capacity','is_available']
         read_only_fields = ['is_available']
 
     def update(self, instance, validated_data):
