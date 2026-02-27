@@ -63,4 +63,102 @@ class TestProductAPI:
     # ---------------
     # INVENTORY TEST
     # ---------------
+    def test_create_inventory(self):
+        category = Category.objects.create(
+            name='fruits'
+        )
+        storage = StorageType.objects.create(
+            name='Cold Storage',
+            temperature_range='10 to 25c'
+        )
+        product = Product.objects.create(
+            name='banana',
+            sku='BAN001',
+            storage_type=storage,
+            category=category
+        )
+        warehouse = Warehouse.objects.create(
+            name='Main Warehouse',
+            location='Hyderabad',
+            manager=self.user
+        )
+        zone = Zone.objects.create(
+            warehouse = warehouse,
+            name = 'Zone X',
+            description = ' '
+        )
+
+        rack = Rack.objects.create(
+            zone = zone,
+            rack_code = 'R001',
+            max_capacity = 100
+        )
+
+        bin = Bin.objects.create(
+            rack = rack,
+            bin_code = 'B001',
+            max_capacity = 100,
+            current_capacity = 50
+        )
+        response = self.client.post(
+            '/api/product/inventories/',
+            {
+                'product':product.id,
+                'bin':bin.id,
+                'quantity':5
+            },
+            format='json'
+        )
+
+        assert response.status_code == 201
+        assert Inventory.objects.count() == 1
     
+    def test_create_stockmovement(self):
+        category = Category.objects.create(
+            name='fruits'
+        )
+        storage = StorageType.objects.create(
+            name='Cold Storage',
+            temperature_range='10 to 25c'
+        )
+        product = Product.objects.create(
+            name='banana',
+            sku='BAN002',
+            storage_type=storage,
+            category=category
+        )
+        warehouse = Warehouse.objects.create(
+            name='Main Warehouse',
+            location='Hyderabad',
+            manager=self.user
+        )
+        zone = Zone.objects.create(
+            warehouse = warehouse,
+            name = 'Zone X',
+            description = ' '
+        )
+
+        rack = Rack.objects.create(
+            zone = zone,
+            rack_code = 'R001',
+            max_capacity = 100
+        )
+
+        bin = Bin.objects.create(
+            rack = rack,
+            bin_code = 'B001',
+            max_capacity = 100,
+            current_capacity = 50
+        )
+        response = self.client.post(
+            '/api/product/stockmovements/',
+            {
+                'product':product.id,
+                'bin':bin.id,
+                'quantity':5,
+                'movement_type':'INBOUND'
+            },
+            format='json'
+        )
+        assert response.status_code == 201
+        assert StockMovement.objects.count() == 1
