@@ -18,6 +18,6 @@ class SalesOrder(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 class SalesOrderItem(models.Model):
-    order = models.ForeignKey(SalesOrder,on_delete=models.CASCADE,related_name='items')
+    order = models.ForeignKey(SalesOrder,on_delete=models.CASCADE,related_name='salesorders')
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
     quantity = models.IntegerField()
