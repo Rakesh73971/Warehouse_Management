@@ -13,4 +13,4 @@ class RegisterView(generics.CreateAPIView):
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    parser_classes = [IsAdmin]
+    permission_classes = [IsAdmin]
