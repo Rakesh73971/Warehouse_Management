@@ -30,7 +30,7 @@ jobs:
       DATABASE_NAME: test_db
       DATABASE_USER: postgres
       DATABASE_PASSWORD: postgres
-      DATABASE_HOST: localhost
+      DATABASE_HOST: postgres
       DATABASE_PORT: 5432
       SECRET_KEY: test-secret-key
       DEBUG: 1
