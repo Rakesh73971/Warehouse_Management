@@ -7,6 +7,7 @@ from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_headers
 from django.core.cache import cache
 from django.utils.decorators import method_decorator
+from .pagination import DefaultPageSize
 
 
 class CacheListMixin:
@@ -26,6 +27,7 @@ class CategoryViewSet(CacheListMixin,viewsets.ModelViewSet):
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
+    pagination_class = DefaultPageSize
     filterset_fields = {
         'name': ['exact', 'icontains'],
     }
@@ -35,6 +37,7 @@ class ProductViewSet(CacheListMixin,viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
+    pagination_class = DefaultPageSize
     filterset_fields = {
         'name': ['exact', 'icontains'],
         'category': ['exact'],
@@ -57,6 +60,7 @@ class InventoryViewSet(CacheListMixin,viewsets.ModelViewSet):
     serializer_class = InventorySerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
+    pagination_class = DefaultPageSize
     filterset_fields = ['product','bin']
 
 class StockMovementViewSet(CacheListMixin,viewsets.ModelViewSet):
@@ -64,6 +68,7 @@ class StockMovementViewSet(CacheListMixin,viewsets.ModelViewSet):
     serializer_class = StockMovementSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
+    pagination_class =DefaultPageSize
     filterset_fields = {
         'product': ['exact'],
         'bin': ['exact'],
