@@ -9,6 +9,7 @@ from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.views.decorators.vary import vary_on_headers
 from django.core.cache import cache
+from .pagination import DefaultPageSize
 
 class CacheListMixin:
 
@@ -24,10 +25,8 @@ class WarehouseViewSet(CacheListMixin,viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     filter_backends = [DjangoFilterBackend]
+    pagination_class = DefaultPageSize
     filterset_fields = ['is_active','location']
-
-    
-    
 
 
 #Zone ViewSet
@@ -36,6 +35,7 @@ class ZoneViewSet(CacheListMixin,viewsets.ModelViewSet):
     serializer_class = ZoneSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
+    pagination_class = DefaultPageSize
     filterset_fields = ['warehouse','storage_type']
 
     
@@ -46,6 +46,7 @@ class RackViewSet(CacheListMixin,viewsets.ModelViewSet):
     serializer_class = RackSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
+    pagination_class = DefaultPageSize
     filterset_fields = ['zone']
 
 
@@ -55,6 +56,7 @@ class BinViewSet(CacheListMixin,viewsets.ModelViewSet):
     serializer_class = BinSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
+    pagination_class = DefaultPageSize
     filterset_fields = ['rack','is_available']
 
 
@@ -63,3 +65,4 @@ class StorageTypeViewSet(CacheListMixin,viewsets.ModelViewSet):
     queryset = StorageType.objects.all()
     serializer_class = StorageTypeSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = DefaultPageSize
