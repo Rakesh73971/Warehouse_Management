@@ -8,3 +8,4 @@ pytest
 pytest-django
 python-dotenv
 drf_yasg
+django_redis

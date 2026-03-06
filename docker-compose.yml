@@ -6,9 +6,9 @@ services:
     container_name: warehouse_db
     restart: always
     environment:
-      POSTGRES_DB: warehouse_db
-      POSTGRES_USER: warehouse_user
-      POSTGRES_PASSWORD: warehouse_pass
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -26,12 +26,19 @@ services:
       - "8000:8000"
     depends_on:
       - db
+      - redis
     environment:
-      - DB_NAME=warehouse_db
-      - DB_USER=warehouse_user
-      - DB_PASSWORD=warehouse_pass
-      - DB_HOST=db
-      - DB_PORT=5432
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+
+  redis:
+    image: redis:7
+    container_name: warehouse_redis
+    ports:
+      - "6379:6379"
 
 volumes:
   postgres_data:
