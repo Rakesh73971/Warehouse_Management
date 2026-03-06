@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .services import confirm_sales_order
 from rest_framework.exceptions import ValidationError
+from .pagination import DefaultPageSize
 
 # Create your views here.
 class SalesOrderViewSet(viewsets.ModelViewSet):
@@ -15,6 +16,7 @@ class SalesOrderViewSet(viewsets.ModelViewSet):
     serializer_class = SalesOrderSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
+    pagination_class = DefaultPageSize
     filterset_fields = {
         'order_number':['exact','icontains'],
         'status':['exact'],
@@ -41,6 +43,7 @@ class SalesOrderItemViewSet(viewsets.ModelViewSet):
     serializer_class = SalesOrderItemSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
+    pagination_class = DefaultPageSize
     filterset_fields = {
         'order': ['exact'],
         'product': ['exact'],
