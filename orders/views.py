@@ -9,9 +9,24 @@ from rest_framework import status
 from .services import confirm_sales_order
 from rest_framework.exceptions import ValidationError
 from .pagination import DefaultPageSize
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_headers
+from django.utils.decorators import method_decorator
+
+
+class CaCheListMixin:
+    @method_decorator(cache_page(60*5))
+    @method_decorator(vary_on_headers('Authorization'))
+    def list(self,request,*args,**kwargs):
+        return super().list(request,*args,**kwargs)
+    
+    @method_decorator(cache_page(60*5))
+    @method_decorator(vary_on_headers('Authorization'))
+    def retrieve(self,request,*args,**kwargs):
+        return super().retrieve(request,*args,**kwargs)
 
 # Create your views here.
-class SalesOrderViewSet(viewsets.ModelViewSet):
+class SalesOrderViewSet(CaCheListMixin,viewsets.ModelViewSet):
     queryset = SalesOrder.objects.all()
     serializer_class = SalesOrderSerializer
     permission_classes = [IsAuthenticated]
@@ -38,7 +53,7 @@ class SalesOrderViewSet(viewsets.ModelViewSet):
             {"message": "Order confirmed successfully"},
             status=status.HTTP_200_OK
         )
-class SalesOrderItemViewSet(viewsets.ModelViewSet):
+class SalesOrderItemViewSet(CaCheListMixin,viewsets.ModelViewSet):
     queryset = SalesOrderItem.objects.select_related('order','product').all()
     serializer_class = SalesOrderItemSerializer
     permission_classes = [IsAuthenticated]
